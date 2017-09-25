@@ -1,0 +1,24 @@
+{
+    "name": "ignatenkovnikita/helpers",
+    "description": "Custom Date Compare Helpers",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/ignatenkovnikita/helpers/issues",
+        "source": "https://github.com/ignatenkovnikita/helpers"
+    },
+    "authors": [
+        {
+            "name": "Nikita Ignatenkov",
+            "email": "ignatenkov.n@gmail.com"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "ignatenkovnikita\\helpers\\": "src/"
+        }
+    }
+}

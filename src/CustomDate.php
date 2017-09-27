@@ -2,38 +2,75 @@
 
 namespace ignatenkovnikita\helpers;
 /**
- * Copyright (C) $user$, Inc - All Rights Reserved
- *
- *  <other text>
- * @file        CustomDate.php
- * @author      ignatenkovnikita
- * @date        $date$
+ * Class CustomDate
+ * @package ignatenkovnikita\helpers
  */
-
 /**
- * Created by PhpStorm.
- * User: ignatenkovnikita
- * Web Site: http://IgnatenkovNikita.ru
+ * Class CustomDate
+ * @package ignatenkovnikita\helpers
  */
 class CustomDate
 {
+    /**
+     * @var integer
+     */
     public $year;
+    /**
+     * @var integer
+     */
     public $month;
+    /**
+     * @var integer
+     */
     public $day;
 
+    /**
+     * @var integer
+     */
     public $hour;
+    /**
+     * @var integer
+     */
     public $minute;
+    /**
+     * @var integer
+     */
     public $second;
 
 
+    /**
+     * Type Sort ASC
+     */
     const SORT_ASC = 'asc';
+    /**
+     * Type Sort DESC
+     */
     const SORT_DESC = 'desc';
 
 
+    /**
+     * Input string in construct
+     * @var string
+     */
     private $_raw;
 
-    private $_dateTime;
+    /**
+     * DateTime object
+     * @var \DateTime
+     */
 
+    private $_dateTime;
+    /**
+     * Input Format
+     * @var string
+     */
+    private $_format;
+
+    /**
+     * CustomDate constructor.
+     * @param $string
+     * @param string $format
+     */
     public function __construct($string, $format = 'H:i:s d.m.Y')
     {
         $this->_raw = $string;
@@ -44,16 +81,31 @@ class CustomDate
     }
 
 
-    public function getFormatted()
+    /**
+     * @return string
+     */
+    public function getFormatted($format = false)
     {
+        if ($format) {
+            return $this->_dateTime->format($format);
+        }
         return $this->_dateTime->format($this->_format);
     }
 
-    public function getTimestamp(){
+    /**
+     * @return int
+     */
+    public function getTimestamp()
+    {
         return $this->_dateTime->getTimestamp();
     }
 
 
+    /**
+     * @param $array
+     * @param string $order_by
+     * @return mixed
+     */
     public static function sortDate($array, $order_by = self::SORT_ASC)
     {
         foreach ($array as &$item) {
@@ -63,7 +115,7 @@ class CustomDate
         }
 
 
-        usort($array, function($a, $b) {
+        usort($array, function ($a, $b) {
             return $a['unixtime'] - $b['unixtime'];
         });
 
@@ -71,6 +123,9 @@ class CustomDate
 
     }
 
+    /**
+     * Fill attributes and object DateTime
+     */
     protected function fill()
     {
         $pattern = '/(\d{2}:|)(\d{2}:|)(\d{2}|)( |)(\d{2}\.|)(\d{2}\.|)(\d{4})/';
@@ -89,6 +144,11 @@ class CustomDate
         $this->_dateTime->setTime($this->hour, $this->minute, $this->second);
     }
 
+    /**
+     * @param $data
+     * @param $index
+     * @return int
+     */
     protected function fillDetail($data, $index)
     {
         if (isset($data[$index])) {

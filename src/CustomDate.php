@@ -9,35 +9,20 @@ namespace ignatenkovnikita\helpers;
  * Class CustomDate
  * @package ignatenkovnikita\helpers
  */
+use ignatenkovnikita\helpers\format\BaseFormat;
+use ReflectionClass;
+
+/**
+ * Class CustomDate
+ * @package ignatenkovnikita\helpers
+ */
 class CustomDate
 {
     /**
-     * @var integer
+     * Supported string type
+     * This format H:i:s d.m.Y
      */
-    public $year;
-    /**
-     * @var integer
-     */
-    public $month;
-    /**
-     * @var integer
-     */
-    public $day;
-
-    /**
-     * @var integer
-     */
-    public $hour;
-    /**
-     * @var integer
-     */
-    public $minute;
-    /**
-     * @var integer
-     */
-    public $second;
-
-
+    const FORMAT_BASE = BaseFormat::class;
     /**
      * Type Sort ASC
      */
@@ -46,50 +31,35 @@ class CustomDate
      * Type Sort DESC
      */
     const SORT_DESC = 'desc';
-
-
     /**
-     * Input string in construct
-     * @var string
-     */
-    private $_raw;
-
-    /**
-     * DateTime object
      * @var \DateTime
      */
-
     private $_dateTime;
-    /**
-     * Input Format
-     * @var string
-     */
-    private $_format;
 
     /**
      * CustomDate constructor.
      * @param $string
-     * @param string $format
+     * @param string $formatter
+     * @internal param int|string $format
      */
-    public function __construct($string, $format = 'H:i:s d.m.Y')
+    public function __construct($string, $formatter = self::FORMAT_BASE)
     {
-        $this->_raw = $string;
-        $this->_dateTime = new \DateTime();
-        $this->_format = $format;
-        $this->fill();
+        /** @var BaseFormat $formater */
+        $format = (new ReflectionClass($formatter))->newInstance();
+        $format->raw = $string;
+
+        $this->_dateTime = $format->fill();
 
     }
 
 
     /**
+     * @param bool|string $format
      * @return string
      */
-    public function getFormatted($format = false)
+    public function getFormatted($format = 'H:i:s d.m.Y')
     {
-        if ($format) {
-            return $this->_dateTime->format($format);
-        }
-        return $this->_dateTime->format($this->_format);
+        return $this->_dateTime->format($format);
     }
 
     /**
@@ -121,40 +91,6 @@ class CustomDate
 
         return $array;
 
-    }
-
-    /**
-     * Fill attributes and object DateTime
-     */
-    protected function fill()
-    {
-        $pattern = '/(\d{2}:|)(\d{2}:|)(\d{2}|)( |)(\d{2}\.|)(\d{2}\.|)(\d{4})/';
-        $found = preg_match($pattern, $this->_raw, $matches);
-
-
-        $this->hour = $this->fillDetail($matches, 1);
-        $this->minute = $this->fillDetail($matches, 2);
-        $this->second = $this->fillDetail($matches, 3);
-        $this->day = $this->fillDetail($matches, 5);
-        $this->month = $this->fillDetail($matches, 6);
-        $this->year = $this->fillDetail($matches, 7);
-
-
-        $this->_dateTime->setDate($this->year, $this->month, $this->day);
-        $this->_dateTime->setTime($this->hour, $this->minute, $this->second);
-    }
-
-    /**
-     * @param $data
-     * @param $index
-     * @return int
-     */
-    protected function fillDetail($data, $index)
-    {
-        if (isset($data[$index])) {
-            return (int)preg_replace('/\D/', '', $data[$index]);
-        }
-        return 0;
     }
 
 

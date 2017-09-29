@@ -29,7 +29,18 @@ class AbstractFormat
      */
     public $raw;
 
+    /**
+     * @var \DateTime
+     */
+    protected $_dateTime;
 
+    /**
+     * AbstractFormat constructor.
+     */
+    public function __construct()
+    {
+        $this->_dateTime = new \DateTime();
+    }
 
 
 }

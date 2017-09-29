@@ -14,7 +14,6 @@ class BaseFormat extends AbstractFormat implements InerfaceFormat
      */
     public function fill()
     {
-        $dateTime = new \DateTime();
 //        $pattern = '/(\d{2}:|)(\d{2}:|)(\d{2}|)( |)(\d{2}\.|)(\d{2}\.|)(\d{4})/';
         $pattern = '/(((\d{2,2})?:?(\d{2,2})?:?(\d{2,2})?)?\s?((\d{2,2})?\.?(\d{2,2})?\.?(\d{2,4})?)?)/';
         $found = preg_match($pattern, $this->raw, $matches);
@@ -31,9 +30,9 @@ class BaseFormat extends AbstractFormat implements InerfaceFormat
         $year = $this->fillDetail($matches, 9);
 
 
-        $dateTime->setDate($year, $month, $day);
-        $dateTime->setTime($hour, $minute, $second);
-        return $dateTime;
+        $this->_dateTime->setDate($year, $month, $day);
+        $this->_dateTime->setTime($hour, $minute, $second);
+        return $this->_dateTime;
     }
 
     /**

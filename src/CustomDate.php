@@ -81,6 +81,7 @@ class CustomDate
         foreach ($array as &$item) {
             $customDate = new CustomDate($item['string']);
 
+            $item['formatted'] = $customDate->getFormatted();
             $item['unixtime'] = $customDate->getTimestamp();
         }
 

@@ -74,21 +74,29 @@ class CustomDate
     /**
      * @param $array
      * @param string $order_by
+     * @param string $formatter
      * @return mixed
      */
-    public static function sortDate($array, $order_by = self::SORT_ASC)
+    public static function sortDate($array, $order_by = self::SORT_ASC, $formatter = self::FORMAT_BASE)
     {
         foreach ($array as &$item) {
-            $customDate = new CustomDate($item['string']);
+            $customDate = new CustomDate($item['string'], $formatter);
 
             $item['formatted'] = $customDate->getFormatted();
             $item['unixtime'] = $customDate->getTimestamp();
         }
 
 
-        usort($array, function ($a, $b) {
-            return $a['unixtime'] - $b['unixtime'];
-        });
+        if ($order_by == self::SORT_ASC) {
+            usort($array, function ($a, $b) {
+                return $a['unixtime'] - $b['unixtime'];
+            });
+        }
+        if ($order_by == self::SORT_DESC) {
+            usort($array, function ($a, $b) {
+                return $b['unixtime'] - $a['unixtime'];
+            });
+        }
 
         return $array;
 

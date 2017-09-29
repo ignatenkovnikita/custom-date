@@ -45,7 +45,7 @@ class CustomDateTest extends PHPUnit_Framework_TestCase
     }
 
 
-    public function testCompare()
+    public function testSortAsc()
     {
         $array = [
             ['id' => 4, 'string' => '01: 21.07.2017'],
@@ -57,6 +57,24 @@ class CustomDateTest extends PHPUnit_Framework_TestCase
 
 
         $sortArray = CustomDate::sortDate($array);
+
+        foreach ($sortArray as $index => $item) {
+            $this->assertEquals($item['id'], $allowArray[$index]);
+        }
+    }
+
+    public function testSortDesc()
+    {
+        $array = [
+            ['id' => 4, 'string' => '01: 21.07.2017'],
+            ['id' => 2, 'string' => '01:05 21.07.2017'],
+            ['id' => 3, 'string' => '01 21.07.2017'],
+            ['id' => 1, 'string' => '01:05:17'],
+        ];
+        $allowArray = [2, 4, 3, 1];
+
+
+        $sortArray = CustomDate::sortDate($array, CustomDate::SORT_DESC);
 
         foreach ($sortArray as $index => $item) {
             $this->assertEquals($item['id'], $allowArray[$index]);

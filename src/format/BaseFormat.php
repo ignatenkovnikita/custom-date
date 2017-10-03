@@ -15,33 +15,19 @@ class BaseFormat extends AbstractFormat implements InerfaceFormat
     public function fill()
     {
 //        $pattern = '/(\d{2}:|)(\d{2}:|)(\d{2}|)( |)(\d{2}\.|)(\d{2}\.|)(\d{4})/';
-        $pattern = '/(((\d{2}?:)?(\d{2}?:)?(\d{2,2})?)?\s?((\d{2}?\.)?(\d{2,2}?\.)?(\d{4})?)?)/';
-        $found = preg_match($pattern, $this->raw, $matches);
+        $pattern = '/^(((\d{2}?:)?(\d{2}?:)?(\d{2,2})?)?\s?((\d{2}?\.)?(\d{2,2}?\.)?(\d{4})?)?)$/m';
+        $found = preg_match($pattern, $this->raw, $matches, PREG_OFFSET_CAPTURE, 0);
         if (empty($found)) {
             throw  new \Exception('Not parse string');
         }
 
 
-        $hour = $this->fillDetail($matches, 3);
-        $minute = $this->fillDetail($matches, 4);
-        $second = $this->fillDetail($matches, 5);
-        $day = $this->fillDetail($matches, 7);
-        if(empty($day)){
-            $day = 1;
-        }
-        $month = $this->fillDetail($matches, 8);
-        if(empty($month)){
-            $month = 1;
-        }
-        $year = $this->fillDetail($matches, 9);
-        if(empty($year)){
-            $year = 1;
-        }
-
-
-        $this->_dateTime->setDate($year, $month, $day);
-        $this->_dateTime->setTime($hour, $minute, $second);
-        return $this->_dateTime;
+        $this->hour = $this->fillDetail($matches, 3);
+        $this->minute = $this->fillDetail($matches, 4);
+        $this->second = $this->fillDetail($matches, 5);
+        $this->day = $this->fillDetail($matches, 7);
+        $this->month = $this->fillDetail($matches, 8);
+        $this->year = $this->fillDetail($matches, 9);
     }
 
     /**
@@ -51,9 +37,37 @@ class BaseFormat extends AbstractFormat implements InerfaceFormat
      */
     protected function fillDetail($data, $index)
     {
-        if (isset($data[$index])) {
-            return (int)preg_replace('/\D/', '', $data[$index]);
+        if (isset($data[$index][0])) {
+            return preg_replace('/\D/', '', $data[$index][0]);
         }
-        return 0;
     }
+
+    public function formatted()
+    {
+        $time = '';
+        $date = '';
+
+        if ($this->hour) {
+            $time .= str_pad($this->hour, 2, '0', STR_PAD_LEFT) . ':';
+        }
+        if ($this->minute) {
+            $time .= str_pad($this->minute, 2, '0', STR_PAD_LEFT) . ':';
+        }
+        if ($this->second) {
+            $time .= str_pad($this->second, 2, '0', STR_PAD_LEFT);
+        }
+        if ($this->day) {
+            $date .= str_pad($this->day, 2, '0', STR_PAD_LEFT) . '.';
+        }
+        if ($this->month) {
+            $date .= str_pad($this->month, 2, '0', STR_PAD_LEFT) . '.';
+        }
+        if ($this->year) {
+            $date .= $this->year;
+        }
+
+        return trim(implode(' ', [$time, $date]));
+    }
+
+
 }

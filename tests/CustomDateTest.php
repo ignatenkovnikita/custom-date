@@ -32,15 +32,15 @@ class CustomDateTest extends PHPUnit_Framework_TestCase
     public function createProvider()
     {
         return [
-            ['01:00:05 21.07.2017' => '01:00:05 21.07.2017'],
-            ['01:05 21.07.2017' => '01:05:00 21.07.2017'],
-            ['01: 21.07.2017' => '01:00:00 21.07.2017'],
-            ['21.07.2017' => '00:00:00 21.07.2017'],
-            ['07.2017' => '00:00:00 01.07.2017'],
-            ['2017' => '00:00:00 01.01.2017'],
-            ['01:' => '01:00:00 01.01.0001'],
-            ['01:05' => '01:05:00 01.01.0001'],
-            ['01:05:17' => '01:05:17 01.01.0001']
+            ['01:00:05 21.07.2017'],
+            ['01:05 21.07.2017'],
+            ['01: 21.07.2017'],
+            ['21.07.2017'],
+            ['07.2017'],
+            ['2017'],
+            ['01:'],
+            ['01:05'],
+            ['01:05:17']
         ];
     }
 
@@ -54,7 +54,6 @@ class CustomDateTest extends PHPUnit_Framework_TestCase
             ['id' => 1, 'string' => '01:05:17'],
         ];
         $allowArray = [1, 3, 4, 2];
-
 
         $sortArray = CustomDate::sortDate($array);
 
@@ -72,7 +71,6 @@ class CustomDateTest extends PHPUnit_Framework_TestCase
             ['id' => 1, 'string' => '01:05:17'],
         ];
         $allowArray = [2, 4, 3, 1];
-
 
         $sortArray = CustomDate::sortDate($array, CustomDate::SORT_DESC);
 

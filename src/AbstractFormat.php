@@ -21,6 +21,10 @@ namespace ignatenkovnikita\helpers;
  * Class AbstractFormat
  * @package ignatenkovnikita\helpers
  */
+/**
+ * Class AbstractFormat
+ * @package ignatenkovnikita\helpers
+ */
 class AbstractFormat
 {
 
@@ -29,18 +33,32 @@ class AbstractFormat
      */
     public $raw;
 
-    /**
-     * @var \DateTime
-     */
-    protected $_dateTime;
 
     /**
-     * AbstractFormat constructor.
+     * @var integer
      */
-    public function __construct()
-    {
-        $this->_dateTime = new \DateTime();
-    }
+    public $year;
+    /**
+     * @var integer
+     */
+    public $month;
+    /**
+     * @var integer
+     */
+    public $day;
+
+    /**
+     * @var integer
+     */
+    public $hour;
+    /**
+     * @var integer
+     */
+    public $minute;
+    /**
+     * @var integer
+     */
+    public $second;
 
 
 }

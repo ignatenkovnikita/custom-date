@@ -31,10 +31,11 @@ class CustomDate
      * Type Sort DESC
      */
     const SORT_DESC = 'desc';
+
     /**
-     * @var \DateTime
+     * @var BaseFormat
      */
-    private $_dateTime;
+    private $_formatter;
 
     /**
      * CustomDate constructor.
@@ -45,10 +46,9 @@ class CustomDate
     public function __construct($string, $formatter = self::FORMAT_BASE)
     {
         /** @var BaseFormat $formater */
-        $format = (new ReflectionClass($formatter))->newInstance();
-        $format->raw = $string;
-
-        $this->_dateTime = $format->fill();
+        $this->_formatter = (new ReflectionClass($formatter))->newInstance();
+        $this->_formatter->raw = $string;
+        $this->_formatter->fill();
 
     }
 
@@ -57,9 +57,9 @@ class CustomDate
      * @param bool|string $format
      * @return string
      */
-    public function getFormatted($format = 'H:i:s d.m.Y')
+    public function getFormatted()
     {
-        return $this->_dateTime->format($format);
+        return $this->_formatter->formatted();
     }
 
     /**
@@ -67,7 +67,16 @@ class CustomDate
      */
     public function getTimestamp()
     {
-        return $this->_dateTime->getTimestamp();
+        $seconds = 0;
+
+        $seconds += $this->_formatter->second;
+        $seconds += $this->_formatter->minute * 60;
+        $seconds += $this->_formatter->hour * 60 * 60;
+        $seconds += $this->_formatter->day * 60 * 60 * 24;
+        $seconds += $this->_formatter->month * 60 * 60 * 24 * 31;
+        $seconds += $this->_formatter->year * 60 * 60 * 24 * 31 * 365;
+        return $seconds;
+
     }
 
 
